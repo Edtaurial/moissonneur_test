@@ -2,7 +2,7 @@ from django.db import models
 
 class JeuDeDonnees(models.Model):
 
-    titre = models.CharField(max_length=255, verbose_name="Titre du jeu de données")
+    titre = models.CharField(max_length=1024, verbose_name="Titre du jeu de données")
     description = models.TextField(blank=True, null=True, verbose_name="Description")
 
 
