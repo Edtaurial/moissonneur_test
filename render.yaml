@@ -7,7 +7,7 @@ services:
     startCommand: cd plateforme_donnees && gunicorn plateforme_donnees.wsgi:application --bind 0.0.0.0:$PORT --workers 4
     envVars:
       - key: PYTHON_VERSION
-        value: 3.12
+        value: 3.12.0
       - key: DJANGO_SETTINGS_MODULE
         value: plateforme_donnees.settings
       # Set this in the Render Dashboard or here (not recommended to commit secrets)
