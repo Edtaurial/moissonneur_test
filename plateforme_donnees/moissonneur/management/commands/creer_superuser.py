@@ -10,6 +10,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         username = os.environ.get('DJANGO_SUPERUSER_USERNAME')
         password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+        email = os.environ.get('DJANGO_SUPERUSER_EMAIL', '') # Utilise une chaîne vide si non défini
 
 
         if not username or not password:
@@ -24,5 +25,5 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f"Mot de passe pour '{username}' mis à jour avec succès."))
         else:
             self.stdout.write(self.style.WARNING(f"Création du superutilisateur '{username}'..."))
-            User.objects.create_superuser(username=username, password=password)
+            User.objects.create_superuser(username=username, email=email, password=password)
             self.stdout.write(self.style.SUCCESS(f"Superutilisateur '{username}' créé avec succès !"))
