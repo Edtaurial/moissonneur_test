@@ -61,3 +61,4 @@ def creer_admin(request):
         User.objects.create_superuser("admin", "admin@example.com", "admin123")
         return HttpResponse("Superutilisateur créé !")
     return HttpResponse("Le superutilisateur existe déjà.")
+

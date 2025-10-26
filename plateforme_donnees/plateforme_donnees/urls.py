@@ -24,6 +24,7 @@ from drf_yasg import openapi
 from graphene_django.views import GraphQLView
 from api.schema import schema
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authtoken.views import obtain_auth_token
 # --- Configuration de la vue du schéma de l'API ---
 schema_view = get_schema_view(
    openapi.Info(
@@ -49,5 +50,7 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path("gql/", graphql_view, name = "graphql"),
+    # Token endpoint to obtain an auth token by POSTing username/password
+    path('api/token-auth/', obtain_auth_token, name='api_token_auth'),
 
 ]
