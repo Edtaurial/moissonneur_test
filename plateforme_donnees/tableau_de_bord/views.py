@@ -15,3 +15,13 @@ def page_statistiques(request):
 
 
     return render(request, 'tableau_de_bord/statistiques.html', {"total_jeux": total_jeux, "repartition_par_source": repartition_par_source, "jeux_recents": jeux_recents})
+
+
+from django.contrib.auth.models import User
+from django.http import HttpResponse
+
+def creer_admin(request):
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "admin123")
+        return HttpResponse("Superutilisateur créé !")
+    return HttpResponse("Le superutilisateur existe déjà.")
