@@ -6,20 +6,20 @@ from django.db.models.functions import TruncMonth
 # Create your views here.
 
 def page_statistiques(request):
-    # 1. Nombre total de jeux de données
+    # nombre total de jeux de donnees
     total_jeux = JeuDeDonnees.objects.count()
 
-    # 2. Répartition par catalogue source
+    #  repartition par catalogue source
     repartition_par_source = (
         JeuDeDonnees.objects.values('source_catalogue')
         .annotate(total=Count('source_catalogue'))
         .order_by('-total')
     )
 
-    # 3. Les 5 jeux de données les plus récemment modifiés
+    # les 5 jeux de donnees les plus recemment modifies
     jeux_recents = JeuDeDonnees.objects.order_by('-date_modification_source')[:5]
 
-    # 4. Répartition thématique
+    # repartition thematique
     repartition_par_organisation = (
         JeuDeDonnees.objects.exclude(organisation__isnull=True).exclude(organisation__exact='')
         .values('organisation')
@@ -27,7 +27,7 @@ def page_statistiques(request):
         .order_by('-total')
     )
 
-    # 5. Tendance mensuelle basée sur la date d'ajout sur la plateforme
+    # tendance mensuelle basee sur la date d'ajout sur la plateforme
     tendance_qs = (
         JeuDeDonnees.objects.annotate(mois=TruncMonth('date_ajout_plateforme'))
         .values('mois')
@@ -56,6 +56,7 @@ def page_statistiques(request):
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 
+# creation d un super utilisateur
 def creer_admin(request):
     if not User.objects.filter(username="admin").exists():
         User.objects.create_superuser("admin", "admin@example.com", "admin123")

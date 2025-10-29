@@ -28,16 +28,15 @@ SECRET_KEY = os.environ.get(
     'django-insecure-o*qtpq50((80ru(g&$c6o_0$7c8((p$9$hbk)3jp92*63si)c8'
 )
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False').lower() in ('1', 'true', 'yes')
 
-# Render provides the external hostname via env var; include common local hosts, too.
+
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else ['localhost', '127.0.0.1']
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
-# Ensure CSRF works on Render domain
+
 CSRF_TRUSTED_ORIGINS = ["https://*.onrender.com"]
 if RENDER_EXTERNAL_HOSTNAME:
     CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_EXTERNAL_HOSTNAME}")
@@ -69,6 +68,18 @@ REST_FRAMEWORK = {
     ]
 }
 
+# configuration pour Swagger pour implkementer l'authentification par token
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+            'description': "Entrez votre token précédé de 'Token '. Exemple : 'Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'"
+        }
+    }
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -85,7 +96,7 @@ ROOT_URLCONF = 'plateforme_donnees.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,7 +128,7 @@ else:
             'USER': 'root',
             'PASSWORD': 'password',
             'HOST': '127.0.0.1',
-            'PORT': '3307',  # 3307 car j'ai changé le port pendant l'installation
+            'PORT': '3307',
             'OPTIONS': {
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
             }
@@ -176,3 +187,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

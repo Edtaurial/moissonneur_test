@@ -11,7 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
 
 
-# Vue pour la liste des jeux de données
+# vue pour la liste des jeux de donnees
 class JeuDeDonneesListAPIView(APIView):
     """
     Lister tous les jeux de données.
@@ -26,7 +26,7 @@ class JeuDeDonneesListAPIView(APIView):
         serializer = JeuDeDonneesSerializer(jeux, many=True, context={'request': request})
         return Response(serializer.data)
 
-# Vue pour le détail d'un seul jeu de données
+# vue pour le détail d un seul jeu de donneees
 class JeuDeDonneesDetailAPIView(APIView):
     """
     Récupérer un jeu de données spécifique par son ID.
@@ -49,7 +49,6 @@ class JeuDeDonneesDetailAPIView(APIView):
         return Response(serializer.data)
 
 
-#curl http://127.0.0.1:8000/api/jeuxdedonnees/ -Headers @{"Authorization"="Token 0bc2f874aab974c02d1cb803afc2ac9621eb026c"}
 
     #mon token : 0bc2f874aab974c02d1cb803afc2ac9621eb026c
     #curl Authorization: Token 0bc2f874aab974c02d1cb803afc2ac9621eb026c http://127.0.0.1:8000/api/jeuxdedonnees
