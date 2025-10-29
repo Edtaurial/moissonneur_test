@@ -1,17 +1,41 @@
 from django.shortcuts import render
-from moissonneur.models import JeuDeDonnees
 from django.db.models import Count
-# Create your views here.
+from django.db.models.functions import TruncYear
+from moissonneur.models import JeuDeDonnees
+
+
 def page_statistiques(request):
-    # 1. Nombre total de jeux de données
+    # nombre total de jeux de donnees
     total_jeux = JeuDeDonnees.objects.count()
 
-    # 2. Répartition par catalogue source
-    #    Ceci va grouper les jeux par 'source_catalogue' et compter combien il y en a dans chaque groupe.
-    repartition_par_source = JeuDeDonnees.objects.values('source_catalogue').annotate(total=Count('source_catalogue')).order_by('-total')
+    # rpartition par catalogue source
+    repartition_par_source = JeuDeDonnees.objects.values('source_catalogue').annotate(
+        total=Count('source_catalogue')).order_by('-total')
 
-    # 3. Les 5 jeux de données les plus récemment modifiés
+    # les 5 jeux de donnees les plus recemment modifies
     jeux_recents = JeuDeDonnees.objects.order_by('-date_modification_source')[:5]
 
+    # repartition par organisation
 
-    return render(request, 'tableau_de_bord/statistiques.html', {"total_jeux": total_jeux, "repartition_par_source": repartition_par_source, "jeux_recents": jeux_recents})
+    repartition_par_organisation = JeuDeDonnees.objects \
+        .values('organisation') \
+        .annotate(total=Count('organisation')) \
+        .order_by('-total')[:10]  # Top 10
+
+    # Tendances Temporelles simples (par annee de creation)
+    tendances_temporelles = JeuDeDonnees.objects.annotate(
+        annee_creation=TruncYear('date_creation_source')
+    ).values('annee_creation') \
+        .annotate(total=Count('id')) \
+        .order_by('annee_creation')
+
+
+    context = {
+        'total_jeux': total_jeux,
+        'repartition_par_source': repartition_par_source,
+        'jeux_recents': jeux_recents,
+        'repartition_par_organisation': repartition_par_organisation,
+        'tendances_temporelles': tendances_temporelles,
+    }
+
+    return render(request, 'tableau_de_bord/statistiques.html', context)

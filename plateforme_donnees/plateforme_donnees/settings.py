@@ -93,6 +93,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'plateforme_donnees.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -107,6 +108,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'plateforme_donnees.wsgi.application'
 

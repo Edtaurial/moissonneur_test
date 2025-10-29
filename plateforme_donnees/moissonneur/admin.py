@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import JeuDeDonnees
 
-# Register your models here.
+
+
 @admin.register(JeuDeDonnees)
 class JeuDeDonneesAdmin(admin.ModelAdmin):
     list_affichage = ('titre', 'source_catalogue', 'organisation', 'date_maj_plateforme')

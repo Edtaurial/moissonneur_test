@@ -10,15 +10,15 @@ class Command(BaseCommand):
     help = 'Lance le moissonnage des données depuis le catalogue CanWin.'
 
     def handle(self, *args, **options):
-        self.stdout.write(self.style.SUCCESS(f'--- Début du moissonnage pour {SOURCE_CATALOGUE} (limite 100) ---'))
+        self.stdout.write(self.style.SUCCESS(f'--- Début du moissonnage pour {SOURCE_CATALOGUE} (limite 500) ---'))
 
 
         start_index = JeuDeDonnees.objects.filter(source_catalogue=SOURCE_CATALOGUE).count()
-        self.stdout.write(f"  {start_index} jeux de données '{SOURCE_CATALOGUE}' déjà en base. Demande des 100 suivants...")
+        self.stdout.write(f"  {start_index} jeux de données '{SOURCE_CATALOGUE}' déjà en base. Demande des 500 suivants...")
 
 
         params = {
-            'rows': 100,  #100 jeux de donnees par requete
+            'rows': 500,  #500 jeux de donnees par requete
             'start': start_index
         }
 

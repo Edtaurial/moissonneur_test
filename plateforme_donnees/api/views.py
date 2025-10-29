@@ -47,10 +47,3 @@ class JeuDeDonneesDetailAPIView(APIView):
         jeu = self.get_object(pk)
         serializer = JeuDeDonneesSerializer(jeu)
         return Response(serializer.data)
-
-
-
-    #mon token : 0bc2f874aab974c02d1cb803afc2ac9621eb026c
-    #curl Authorization: Token 0bc2f874aab974c02d1cb803afc2ac9621eb026c http://127.0.0.1:8000/api/jeuxdedonnees
-
-    #Invoke-RestMethod -Uri "http://127.0.0.1:8000/api/jeuxdedonnees/" -Headers @{ Authorization = "Token 0bc2f874aab974c02d1cb803afc2ac9621eb026c" }
