@@ -39,9 +39,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('api.urls')),
+    path('api', include('api.urls')),
     path('', include('tableau_de_bord.urls')),
-    path('', include('gql.urls')),
+    path('graphql/', include('gql.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('api/token-auth/', obtain_auth_token, name='api_token_auth')

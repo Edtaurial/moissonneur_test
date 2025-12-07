@@ -7,5 +7,5 @@ from .views import PrivateGraphQLView
 graphql_view = csrf_exempt(PrivateGraphQLView.as_view(graphiql=True, schema=schema))
 
 urlpatterns = [
-    path("gql/", graphql_view, name="graphql"),
+    path("", graphql_view, name="graphql"),
 ]
