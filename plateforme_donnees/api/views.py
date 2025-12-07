@@ -7,9 +7,11 @@ from .serializer import JeuDeDonneesSerializer
 from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
-
+from django.contrib.auth.models import User
+from .serializer import UserSerializer
+from rest_framework import generics
 
 # vue pour la liste des jeux de donnees
 class JeuDeDonneesListAPIView(APIView):
@@ -47,3 +49,23 @@ class JeuDeDonneesDetailAPIView(APIView):
         jeu = self.get_object(pk)
         serializer = JeuDeDonneesSerializer(jeu)
         return Response(serializer.data)
+
+
+# vue pour la création d'un utilisateur
+class ManageUserView(generics.RetrieveUpdateAPIView):
+    """
+    Créer un nouvel utilisateur.
+    """
+    serializer_class = UserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # Retourne directement l'utilisateur connecté via le token
+        return self.request.user
+
+# NOUVEAU : Vue d'inscription (ouverte à tous)
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]

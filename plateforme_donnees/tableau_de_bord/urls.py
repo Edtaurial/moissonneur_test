@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     path('', views.page_statistiques, name='page_statistiques'),
+    path('creeradmin/',views.creer_admin),
 ]

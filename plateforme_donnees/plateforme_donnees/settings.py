@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'graphene_django',
     'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 REST_FRAMEWORK = {
@@ -90,6 +91,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'plateforme_donnees.urls'
@@ -113,31 +115,38 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'plateforme_donnees.wsgi.application'
 
+CORS_ALLOW_ALL_ORIGINS = True # permet de tout autoriser
 
 # Database
 # Prefer DATABASE_URL (e.g., from Render PostgreSQL). Fallback to local MySQL for development.
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-_db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
-if _db_from_env:
-    DATABASES = {
-        'default': _db_from_env
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'plateforme_donnees_db',
-            'USER': 'root',
-            'PASSWORD': 'password',
-            'HOST': '127.0.0.1',
-            'PORT': '3307',  # 3307 car j'ai changé le port pendant l'installation
-            'OPTIONS': {
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
-            }
-        }
-    }
+# _db_from_env = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# if _db_from_env:
+#     DATABASES = {
+#         'default': _db_from_env
+#     }
+# else:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.mysql',
+#             'NAME': 'plateforme_donnees_db',
+#             'USER': 'root',
+#             'PASSWORD': 'password',
+#             'HOST': '127.0.0.1',
+#             'PORT': '3307',  # 3307 car j'ai changé le port pendant l'installation
+#             'OPTIONS': {
+#                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+#             }
+#         }
+#     }
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
+    }
+}
 # Ensure correct scheme behind reverse proxy (Render)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -185,6 +194,10 @@ STATICFILES_DIRS = [
 
 # WhiteNoise config for serving static files in production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
