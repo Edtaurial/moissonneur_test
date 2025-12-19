@@ -8,18 +8,36 @@ class JeuDeDonneesType(DjangoObjectType):
         fields = '__all__'
 
 class Query(graphene.ObjectType):
-    all_jeu_donnees = graphene.List(JeuDeDonneesType)
+    # 1. On déclare les arguments acceptés pour la liste
+    tous_les_jeux = graphene.List(
+        JeuDeDonneesType, 
+        organisation=graphene.String(),
+        first=graphene.Int(),
+        titre_contains=graphene.String()
+    )
+    
+    # 2. On déclare le champ pour un élément unique
+    jeu_de_donnees = graphene.Field(JeuDeDonneesType, id=graphene.Int(required=True))
 
-    jeu_donnees_by_id = graphene.Field(JeuDeDonneesType, id=graphene.Int(required=True))
+    # Resolveur pour la liste (Gère les filtres et la limite)
+    def resolve_tous_les_jeux(self, info, organisation=None, first=None, titre_contains=None):
+        qs = JeuDeDonnees.objects.all()
+        
+        if organisation:
+            qs = qs.filter(organisation=organisation)
+            
+        if titre_contains:
+            qs = qs.filter(titre__icontains=titre_contains)
+            
+        if first:
+            qs = qs[:first] # Applique la limite (ex: first: 10)
+            
+        return qs
 
-
-    def resolve_all_jeu_donnees(self, info, **kwargs):
-        return JeuDeDonnees.objects.all()
-
-    def resolve_jeu_donnees_by_id(root, info, id):
+    # Resolveur pour l'élément unique
+    def resolve_jeu_de_donnees(self, info, id):
         try:
             return JeuDeDonnees.objects.get(pk=id)
         except JeuDeDonnees.DoesNotExist:
             return None
-
 schema = graphene.Schema(query=Query)

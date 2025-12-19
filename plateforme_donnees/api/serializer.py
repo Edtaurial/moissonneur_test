@@ -26,3 +26,19 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data.get('last_name', '')
         )
         return user
+
+    # --- AJOUT IMPORTANT POUR LA SECTION 3.3 ---
+    def update(self, instance, validated_data):
+        # On extrait le mot de passe s'il est présent
+        password = validated_data.pop('password', None)
+        
+        # On met à jour les autres champs normalement
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        # Si un mot de passe a été fourni, on le hache avec set_password()
+        if password:
+            instance.set_password(password)
+            
+        instance.save()
+        return instance
